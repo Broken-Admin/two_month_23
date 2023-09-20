@@ -39,6 +39,7 @@ void loop() {
     } else if (command == "time") {
       Serial.println(millis());
     } else if (command == "idle") {
+      // Idle - blink the built-in LED every 500 milliseconds
       if (!idleStatus) {
         Serial.println("idling");
         digitalWrite(IDLE_PIN, HIGH);
@@ -49,6 +50,7 @@ void loop() {
     }
   }
 
+  // Perform idle blink every 500 milliseconds
   if (idleStatus) {
     bool idleLEDStatus = digitalRead(LED_BUILTIN) == HIGH;
     if (!idleLEDStatus) {
