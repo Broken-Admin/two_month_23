@@ -6,8 +6,10 @@ void setup() {
   // Turn LED on for initialization
   digitalWrite(LED_PIN, HIGH);
 
-  // Configure serial transport
+  // Configure USB serial
+  // Value provided is ignored in favor for the USB default
   Serial.begin(115200);
+  // Sleep for one second
   delay(100);
 
   // Turn LED off after serial initialization
