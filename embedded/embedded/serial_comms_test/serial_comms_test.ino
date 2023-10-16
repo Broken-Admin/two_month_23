@@ -1,34 +1,50 @@
-#define IDLE_PIN 15
+#define ACTIVE_IDLE_PIN 15
 
 void setup() {
   // Built in LED
   pinMode(LED_BUILTIN, OUTPUT);
   // Status LED
-  pinMode(IDLE_PIN, OUTPUT);
+  pinMode(ACTIVE_IDLE_PIN, OUTPUT);
 
   // Start as idle
-  digitalWrite(IDLE_PIN, HIGH);
+  digitalWrite(ACTIVE_IDLE_PIN, HIGH);
 
   // Configure USB serial
   // Value provided is ignored in favor for the USB default
   Serial.begin(115200);
   // Sleep for one second
-  delay(100);
+  delay(1000);
+
+  // Halt until the Serial line is ready
+  while(!Serial.availableForWrite()) {
+    // Leave idle LED off until the serial is open
+    digitalWrite(LED_BUILTIN, LOW);
+    delay(500);
+    digitalWrite(LED_BUILTIN, HIGH);
+    delay(2000);
+  }
 
   // Turn LED off after serial initialization
   digitalWrite(LED_BUILTIN, HIGH);
 
   delay(500);
 
-  digitalWrite(LED_BUILTIN, LOW);
+  digitalWrite(ACTIVE_IDLE_PIN, LOW);
+
+  // Write back
+  delay(1000);
+  Serial.println("Initalized.");
+  delay(1000);
 }
 
 void loop() {
-  bool idleStatus = digitalRead(IDLE_PIN) == HIGH;
+  bool idleStatus = digitalRead(ACTIVE_IDLE_PIN) == HIGH;
 
   if (Serial.available()) {
     String command = Serial.readStringUntil('\n');
     command.trim();
+
+    Serial.println(command);
 
     if (command == "led_on") {
       digitalWrite(LED_BUILTIN, HIGH);
@@ -42,10 +58,10 @@ void loop() {
       // Idle - blink the built-in LED every 500 milliseconds
       if (!idleStatus) {
         Serial.println("idling");
-        digitalWrite(IDLE_PIN, HIGH);
+        digitalWrite(ACTIVE_IDLE_PIN, HIGH);
       } else {
         Serial.println("stopping idle");
-        digitalWrite(IDLE_PIN, LOW);
+        digitalWrite(ACTIVE_IDLE_PIN, LOW);
       }
     }
   }
