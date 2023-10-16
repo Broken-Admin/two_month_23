@@ -69,7 +69,7 @@ async function ROS2_handle() {
 
   basestationNode = new Basestation();
   // Test data publish
-  basestationNode.publish('Some fucking data');
+  basestationNode.publish('ROS2 published data');
 
   // Initialize the ROS2 node
   basestationNode.spin();
