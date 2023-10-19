@@ -2,19 +2,11 @@
 <html>
 
 <head>
-    <title>Team One Basestation</title>
-    <link rel="stylesheet" href="index.css">
-    <link rel="stylesheet" href="bootstrap.min.css">
-
-    <!-- Link the socket -->
-    <script src="/socket.io/socket.io.js"></script>
-    <!-- Initalize the socket -->
-    <script>
-        var socket = io();
-    </script>
+    <title>Gamepad Information</title>
+    <link rel="stylesheet" href="../index.css">
+    <link rel="stylesheet" href="../bootstrap.min.css">
     <!-- Link the primary interaction code -->
-    <script src="./socketinteractions.js"></script>
-    <script src="./gamepadinteraction.js"></script>
+    <script src="gamepadDisplay.js"></script>
 
 </head>
 
@@ -40,10 +32,11 @@
     <!-- <div class="container">
         <header class="d-flex flex-wrap justify-content-center">
             <div class="d-flex align-items-center text-center text-decoration-none">
-                <span class="fs-2 fw-normal">Team One: Two Month '23</span>
+                <span class="fs-2 fw-normal">Gamepad Information</span>
             </div>
         </header>
-    </div> -->
+    </div>
+    <hr> -->
     <div class="container">
         <div class="row pt-3">
             <div class="col text-center">
@@ -111,22 +104,6 @@
                     </div>
                     </span>
                 </div>
-            </div>
-        </div>
-    </div>
-    <hr>
-    <div class="container pt-3">
-        <div class="row">
-            <div class="col-4">
-                <span class="fs-4 fw-normal"><code>/roverone/pico_status</code></span>
-                <!-- Code nust be all the way to the left, or it is output on the page -->
-                <pre class="fs-13 lh-sm p-1"><code id="/roverone/pico_status"></code></pre>
-            </div>
-            <div class="col-4 border-start border-end text-center">
-                Column 2
-            </div>
-            <div class="col-4 text-center">
-                Column 3
             </div>
         </div>
     </div>

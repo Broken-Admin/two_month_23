@@ -18,7 +18,7 @@ class Basestation extends rclnodejs.Node {
     // Create ROS2 publisher
     // Parsed by Libre node
     // Parsed data via serial to the Pico
-    this.publisher = this.createPublisher(
+    this.controls = this.createPublisher(
       'std_msgs/msg/String',
       '/roverone/control_data'
     );
@@ -26,7 +26,7 @@ class Basestation extends rclnodejs.Node {
     // Create a ROS2 subscriber
     // Output from the Pico, parsed by the Libre
     // Libre parsed data sent via ROS2
-    this.subscriber = this.createSubscription(
+    this.status = this.createSubscription(
       'std_msgs/msg/String',
       '/roverone/pico_status',
       this.handler
@@ -43,18 +43,20 @@ class Basestation extends rclnodejs.Node {
   // String data
   // Create a format
   publish(data) {
-    this.publisher.publish(data);
+    this.controls.publish(data);
   }
 
-  // Subscriber handler
+  // Subscriber handler / Pico return data 
   // Integrate socket.io
   handler(msg) {
-    console.log(`Recieved message: ${typeof msg}`, msg.data);
+    console.log(`Pico reply: ${msg.data}`);
+    io.emit('status', msg.data);
   }
 
   // Handles output from this node to be echoed
+  // All data sent from this node is processed here
   echoHandler(msg) {
-    console.log(`This node sent data: ${msg.data}`);
+    console.log(`Data was sent on the control topic: ${msg.data}`);
   }
 }
 
@@ -104,7 +106,7 @@ io.on('connection', (socket) => {
   });
 
   // Returned controller data update
-  socket.on('controller_data', (data) => {
+  socket.on('control', (data) => {
     console.log(`Received data from the web page: ${data}`);
     basestationNode.publish(data);
   });
