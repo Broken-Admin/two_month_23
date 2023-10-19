@@ -1,5 +1,7 @@
 var cGamepadID;
 var pollInterval = undefined;
+var sendInterval = undefined;
+var clearInterval = undefined;
 var gamepadConnected = false;
 
 var leftTriggerID = 6;
@@ -18,13 +20,25 @@ window.addEventListener("gamepadconnected", (e) => {
     cGamepadID = e.gamepad.id;
 
     // If a new gamepad has been connected
-    if (pollInterval != undefined) {
-        clearInterval(pollInterval)
+    if (pollInterval != undefined || sendInterval != undefined || clearInterval != undefined) {
+        clearInterval(pollInterval);
+        clearInterval(sendInterval);
+        clearInterval(clearInterval)
     }
 
     // Set an interval to regularly poll the controller for
     // updates and to update the display
-    pollInterval = setInterval(pollGamepad, 250);
+    pollMilliseconds = 100
+    pollInterval = setInterval(pollGamepad, pollMilliseconds);
+    
+    // Regularly send data
+    sendMilliseconds = pollMilliseconds * 2.5;
+    sendInterval = setInterval(sendGamepad, sendMilliseconds);
+
+    // Clear the log regularly
+    clearMilliseconds = sendMilliseconds * 10;
+    clearInterval = setInterval(clearControlLog, clearMilliseconds);
+    
 
     /* Update the display */
 
@@ -111,9 +125,32 @@ function pollGamepad() {
     
     // Reset
     gamepadStatus = {
-        buttons: {},
-        trigger_vals: {},
-        stick_vals: {}
+        buttons: {
+            a: false,
+            b: false,
+            x: false,
+            y: false,
+            left_bumper: false,
+            right_bumper: false,
+            left_trigger: false,
+            right_trigger: false,
+            view: false,
+            menu: false,
+            d_up: false,
+            d_down: false,
+            d_left: false,
+            d_right: false
+        },
+        trigger_vals: {
+            left_trigger_val: 0,
+            right_trigger_val: 0
+        },
+        stick_vals: {
+            left_hval: 0,
+            left_vval: 0,
+            right_hval: 0,
+            right_vval: 0
+          }
     };
 
     // Define controller data variable
@@ -173,7 +210,7 @@ function pollGamepad() {
             }
             /* Update trigger value JSON for communication */
             let offsetIndex = i - leftTriggerID;
-            gamepadStatus["trigger_vals"][trigger_indexes[offsetIndex]] = gamepadButton.value;
+            gamepadStatus["trigger_vals"][trigger_indexes[offsetIndex]] = gamepadButton.value.toFixed(4);
         }
     }
 
@@ -191,7 +228,20 @@ function pollGamepad() {
         axis.innerHTML = i + ": " + cGamepadState.axes[i].toFixed(4);
         // Update the bar length
         axis.setAttribute("value", cGamepadState.axes[i]);
+        /* Update stick value JSON for communication */
+        gamepadStatus["stick_vals"][stick_indexes[i]] = cGamepadState.axes[i].toFixed(4);
     }
+}
+
+function sendGamepad() {
+    // Make use of JSON library to convert object to a string
+    let statusString = JSON.stringify(gamepadStatus)
+    socket.emit("control", statusString);
+}
+
+function clearControlLog() {
+    logEl = document.getElementById('/rover_one/control_data');
+    logEl.innerHTML = "";
 }
 
 // Quality of life

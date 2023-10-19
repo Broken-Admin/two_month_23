@@ -20,7 +20,7 @@ class Basestation extends rclnodejs.Node {
     // Parsed data via serial to the Pico
     this.controls = this.createPublisher(
       'std_msgs/msg/String',
-      '/roverone/control_data'
+      '/rover_one/control_data'
     );
 
     // Create a ROS2 subscriber
@@ -28,13 +28,13 @@ class Basestation extends rclnodejs.Node {
     // Libre parsed data sent via ROS2
     this.status = this.createSubscription(
       'std_msgs/msg/String',
-      '/roverone/pico_status',
+      '/rover_one/pico_status',
       this.handler
     );
 
     this.echo = this.createSubscription(
       'std_msgs/msg/String',
-      '/roverone/control_data',
+      '/rover_one/control_data',
       this.echoHandler
     );
   }
@@ -57,6 +57,7 @@ class Basestation extends rclnodejs.Node {
   // All data sent from this node is processed here
   echoHandler(msg) {
     console.log(`Data was sent on the control topic: ${msg.data}`);
+    io.emit('control_return', msg.data);
   }
 }
 
@@ -76,7 +77,7 @@ async function ROS2_handle() {
   // Initialize the ROS2 node
   basestationNode.spin();
 
-  console.log('Use this command to view the node\'s published messages: ros2 topic echo /roverone/control_data std_msgs/msg/String');
+  console.log('Use this command to view the node\'s published messages: ros2 topic echo /rover_one/control_data std_msgs/msg/String');
 }
 
 // ROS2 handler initialization
@@ -99,10 +100,12 @@ app.use(express.static(__dirname + '/www'));
 // Socket handlers
 io.on('connection', (socket) => {
   console.log('Connection');
-
+  // Let the rover know the basestation is connected
+  
   // Disconnection event handler
   socket.on('disconnect', () => {
     console.log('Disconnection.');
+    // Let the rover know the basestation is disconnected
   });
 
   // Returned controller data update

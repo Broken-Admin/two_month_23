@@ -1,6 +1,23 @@
 // The `socket` has already been initalized by the page
 socket.on('status', processStatus);
 
+function codeAppend(elementID, text, elementColorClass="", elementClass="text-wrap") {
+    // Create elements and append them to the provided element
+
+    // Code block element
+    parentEl = document.getElementById(elementID);
+    // If the parent doesn't exist
+    if (!parentEl) return;
+
+    // Create an element
+    messageEl = document.createElement('span');
+    // Update the text
+    messageEl.innerText = text;
+    // Update the class
+    messageEl.className = `${elementClass} ${elementColorClass}`;
+    // Add the element to the DOM
+    parentEl.innerHTML = `${messageEl.outerHTML}\n${parentEl.innerHTML}`;
+}
 
 /* 
 <span class="text-danger">[ERROR]</span>
@@ -18,40 +35,32 @@ function processStatus(msg) {
         .replace(/(\[|\])/g, '') // Remove "[" and "]"
         .toLowerCase(); // Change to lowercase
     // Assume that it is of the correct format and perform checks
-    let statusClass = 'text-'; // Begin the class type
-    console.log(statusTag);
+    let statusColorClass = 'text-';
     switch (statusTag) {
         case 'error':
-            statusClass += 'danger';
+            statusColorClass += 'danger';
             break;
         case 'good':
-            statusClass += 'success';
+            statusColorClass += 'success';
             break;
         case 'info':
-            statusClass += 'info';
+            statusColorClass += 'info';
             break;
         case 'warning':
-            statusClass += 'warning';
+            statusColorClass += 'warning';
             break;
         // Default to the info tag if there is no
         // valid status code provided
         default:
-            statusClass += 'info';
+            statusColorClass += 'info';
             break;
     }
-    // Create elements and append them to the `/rover_one/pico_status`
-    // code block
-    statusEl = document.getElementById('/roverone/pico_status');
-    // Create an element
-    messageEl = document.createElement('span');
-    messageEl.className = `${statusClass} text-wrap`;
-    messageEl.innerText = msg;
-    // Add the element to the DOM
-    statusEl.innerHTML += `${messageEl.outerHTML}\n`;
+
+    codeAppend('/rover_one/pico_status', msg, statusColorClass);
 }
 
-socket.on('control', processControlData);
+socket.on('control_return', processControlData);
 
-function processControlData() {
-    
+function processControlData(msg) {
+    codeAppend('/rover_one/control_data', msg);
 }
