@@ -13,8 +13,6 @@ class Basestation extends rclnodejs.Node {
   constructor() {
     super('Basestation');
 
-    // Do webserver initalization
-
     // Create ROS2 publisher
     // Parsed by Libre node
     // Parsed data via serial to the Pico
