@@ -31,12 +31,18 @@ window.addEventListener("gamepadconnected", (e) => {
     // Items whose visibility needs to change
     notConnectedIndicator = document.getElementById('controller-not-connected');
     controllerIndicators = document.getElementById('controller-indicators');
+    vibrateButton = document.getElementById('vibrate-button');
     
     // Show the controller indicators
     let classes = controllerIndicators.className.trim().split(' ');
     let deleteIndex = classes.indexOf('d-none');
     if(deleteIndex != -1) classes.splice(deleteIndex, 1);
     controllerIndicators.className = classes.join(' ');
+    // Show the vibrate button
+    classes = vibrateButton.className.trim().split(' ');
+    deleteIndex = classes.indexOf('d-none');
+    if(deleteIndex != -1) classes.splice(deleteIndex, 1);
+    vibrateButton.className = classes.join(' ');
 
     // Hide the not connected message
     classes = notConnectedIndicator.className.trim().split(' ');
@@ -46,6 +52,9 @@ window.addEventListener("gamepadconnected", (e) => {
 });
 
 window.addEventListener("gamepaddisconnected", (e) => {
+    // When the gamepad disconnects, stop interval
+    clearInterval(pollInterval)
+
     // Is this the gamepad that's currently being used, if not exit
     if(e.gamepad.id != cGamepadID) return;
     // If this is the gamepad that's being used perform some updates
@@ -53,6 +62,7 @@ window.addEventListener("gamepaddisconnected", (e) => {
     // Items whose visibility needs to change
     notConnectedIndicator = document.getElementById('controller-not-connected');
     controllerIndicators = document.getElementById('controller-indicators');
+    vibrateButton = document.getElementById('vibrate-button');
     
     // Show the not connected message
     let classes = notConnectedIndicator.className.split(' ');
@@ -64,6 +74,10 @@ window.addEventListener("gamepaddisconnected", (e) => {
     classes = controllerIndicators.className.split(' ');
     classes.push('d-none');
     controllerIndicators.className = classes.join(' ');
+    // Hide the vibrate button
+    classes = vibrateButton.className.split(' ');
+    classes.push('d-none');
+    controllerIndicators.className = classes.join();
 })
 
 function pollGamepad() {
@@ -133,6 +147,25 @@ function pollGamepad() {
         // Update the bar length
         axis.setAttribute("value", cGamepadState.axes[i]);
     }
+}
+
+
+function vibrateController(time) {
+    let cGamepad;
+
+    let gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads() : []);
+    for (var i = 0; i < gamepads.length; i++) {
+        if (gamepads[i] && gamepads[i].id == cGamepadID) {
+            cGamepad = gamepads[i];
+        }
+    }
+
+    cGamepad.vibrationActuator.playEffect("dual-rumble", {
+    startDelay: 0,
+    duration: time,
+    weakMagnitude: 1,
+    strongMagnitude: 1,
+    });
 }
 
 // Quality of life
