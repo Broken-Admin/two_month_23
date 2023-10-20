@@ -30,11 +30,11 @@ class Basestation extends rclnodejs.Node {
       this.handler
     );
 
-    this.echo = this.createSubscription(
+    /* this.echo = this.createSubscription(
       'std_msgs/msg/String',
       '/rover_one/control_data',
       this.echoHandler
-    );
+    ); */
   }
 
   // Handle sending data
@@ -52,9 +52,10 @@ class Basestation extends rclnodejs.Node {
   }
 
   // Handles output from this node to be echoed
-  // All data sent from this node is processed here
+  // All control data sent from this node is processed here
+  // per the this.echo subscription
   echoHandler(msg) {
-    console.log(`Data was sent on the control topic: ${msg.data}`);
+    // console.log(`Data was sent on the control topic: ${msg.data}`);
     io.emit('control_return', msg.data);
   }
 }
@@ -108,7 +109,7 @@ io.on('connection', (socket) => {
 
   // Returned controller data update
   socket.on('control', (data) => {
-    console.log(`Received data from the web page: ${data}`);
+    // console.log(`Received data from the web page: ${data}`);
     basestationNode.publish(data);
   });
 });

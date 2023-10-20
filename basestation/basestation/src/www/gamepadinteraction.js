@@ -2,6 +2,7 @@ var cGamepadID;
 var pollInterval = undefined;
 var sendInterval = undefined;
 var clearInterval = undefined;
+var displayInterval = undefined;
 var gamepadConnected = false;
 
 var leftTriggerID = 6;
@@ -20,10 +21,12 @@ window.addEventListener("gamepadconnected", (e) => {
     cGamepadID = e.gamepad.id;
 
     // If a new gamepad has been connected
-    if (pollInterval != undefined || sendInterval != undefined || clearInterval != undefined) {
+    if (pollInterval != undefined || sendInterval != undefined
+        || clearInterval != undefined || displayInterval != undefined) {
         clearInterval(pollInterval);
         clearInterval(sendInterval);
-        clearInterval(clearInterval)
+        clearInterval(clearInterval);
+        clearInterval(displayInterval);
     }
 
     // Set an interval to regularly poll the controller for
@@ -36,9 +39,13 @@ window.addEventListener("gamepadconnected", (e) => {
     sendInterval = setInterval(sendGamepad, sendMilliseconds);
 
     // Clear the log regularly
-    clearMilliseconds = sendMilliseconds * 10;
+    clearMilliseconds = sendMilliseconds * 20;
     clearInterval = setInterval(clearControlLog, clearMilliseconds);
     
+    // Update gamepad display regularly
+    displayInterval = setInterval(() => {
+        codeAppend('/rover_one/control_data', JSON.stringify(gamepadStatus["buttons"])+JSON.stringify(gamepadStatus["trigger_vals"])+JSON.stringify(gamepadStatus["stick_vals"]));
+    }, 5000);
 
     /* Update the display */
 
@@ -60,6 +67,15 @@ window.addEventListener("gamepadconnected", (e) => {
 });
 
 window.addEventListener("gamepaddisconnected", (e) => {
+    // When the gamepad disconnects, stop intervals
+    if (pollInterval != undefined || sendInterval != undefined
+        || clearInterval != undefined || displayInterval != undefined) {
+        clearInterval(pollInterval);
+        clearInterval(sendInterval);
+        clearInterval(clearInterval);
+        clearInterval(displayInterval);
+    }
+
     // Is this the gamepad that's currently being used, if not exit
     if(e.gamepad.id != cGamepadID) return;
     // If this is the gamepad that's being used perform some updates
@@ -123,7 +139,7 @@ function pollGamepad() {
     }
     */}
     
-    // Reset
+    // Reset gamepadStatus to defaults
     gamepadStatus = {
         buttons: {
             a: false,
@@ -241,6 +257,8 @@ function sendGamepad() {
 
 function clearControlLog() {
     logEl = document.getElementById('/rover_one/control_data');
+    logEl.innerHTML = "";
+    logEl = document.getElementById('/rover_one/pico_status');
     logEl.innerHTML = "";
 }
 
