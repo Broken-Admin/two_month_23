@@ -106,7 +106,7 @@ class SerialRelay(Node):
         #define CONT_MAX 113 // Counterclockwise
         # [72, 113]
         left_hval = round(control_data["stick_vals"]["left_hval"] * 100)
-        if(left_hval > 10 left_hval < -10):
+        if(left_hval > 10 or left_hval < -10):
             joint5_angle = (113 - 72) * (left_hval / 100) + 72
         else:
             joint5_angle = 0
