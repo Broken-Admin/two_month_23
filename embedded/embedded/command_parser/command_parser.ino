@@ -12,6 +12,10 @@
 #define J5 10
 #define J6 11
 
+class ContinuousServo : public Servo {
+  ContinuousServo(int ) 
+}
+
 
 Servo Joint1; // Cont
 Servo Joint2; // 270
@@ -48,15 +52,12 @@ void setup() {
   Joint5.attach(J5);
 
   // 180 servo
-  Joint2.attach(J2, 500, 2500);
   Joint3.attach(J3, 500, 2500);
   Joint4.attach(J4, 500, 2500);
   Joint6.attach(J6, 500, 2500); // Stalls at 90deg
 
-  // Write back
-  delay(1000);
-  Serial.println("Initalized.");
-  delay(1000);
+  // 270 servo
+  Joint2.attach(J2, 500, 2500);
 }
 
 void loop() {
@@ -64,12 +65,10 @@ void loop() {
 
   if (Serial.available()) {
     String data = Serial.readStringUntil('\n');
-    
-    // Parse the command
-    command = strtok(data, " ");
     command.trim();
 
     Serial.println(command);
+
 
     if (command == "led_on") {
       digitalWrite(LED_BUILTIN, HIGH);
@@ -89,7 +88,8 @@ void loop() {
         digitalWrite(IDLE_PIN, LOW);
       }
     } 
-    else if (command == "servo") {
+    /* 180 SERVO */
+    else if (command == "180") {
       Serial.println("Write what angle value?");
       while (!Serial.available()) {}
 
