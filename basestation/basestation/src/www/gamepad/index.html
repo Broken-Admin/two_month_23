@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Gamepad Information</title>
+    <link rel="stylesheet" href="../index.css">
+    <link rel="stylesheet" href="../bootstrap.min.css">
+    <!-- Link the primary interaction code -->
+    <script src="gamepadDisplay.js"></script>
+
+</head>
+
+<body class="bg-dark text-light">
+    <nav class="navbar navbar-expand-lg bg-dark-subtle">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#">Team One: Two Month '23</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="/">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/gamepad/">Gamepad Information</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+    </nav>
+    <!-- <div class="container">
+        <header class="d-flex flex-wrap justify-content-center">
+            <div class="d-flex align-items-center text-center text-decoration-none">
+                <span class="fs-2 fw-normal">Gamepad Information</span>
+            </div>
+        </header>
+    </div>
+    <hr> -->
+    <div class="container">
+        <div class="row pt-3">
+            <div class="col text-center">
+                <div id="controller-status">
+                    <div class="fs-2" >Controller Status:</div>
+                    <div class="fs-4" id="controller-not-connected">Please connect a controller.</div>
+                    <span class="d-none" id="controller-indicators">
+                    <div class="buttons">
+                        <!--
+                            When these buttons are fetched they will return
+                            in the order they are. Meaning the first button will be first,
+                            second is second, etc
+                        -->
+                        <button type="button" class="controller-buttons btn btn-info text-center" style="width: 5ch; pointer-events: none;">A</button>
+                        <button type="button" class="controller-buttons btn btn-info text-center" style="width: 5ch; pointer-events: none;">B</button>
+                        <button type="button" class="controller-buttons btn btn-info text-center" style="width: 5ch; pointer-events: none;">X</button>
+                        <button type="button" class="controller-buttons btn btn-info text-center" style="width: 5ch; pointer-events: none;">Y</button>
+                        <button type="button" class="controller-buttons btn btn-info text-center" style="width: 5ch; pointer-events: none;">LB</button>
+                        <button type="button" class="controller-buttons btn btn-info text-center" style="width: 5ch; pointer-events: none;">RB</button>
+                        <button type="button" class="controller-buttons btn btn-info text-center" style="width: 5ch; pointer-events: none;">LT</button>
+                        <button type="button" class="controller-buttons btn btn-info text-center" style="width: 5ch; pointer-events: none;">RT</button>
+                        <button type="button" class="controller-buttons btn btn-info text-center" style="width: 8ch; pointer-events: none;">View</button>
+                        <button type="button" class="controller-buttons btn btn-info text-center" style="width: 8ch; pointer-events: none;">Menu</button>
+                        <button type="button" class="controller-buttons btn btn-info text-center" style="width: 5ch; pointer-events: none;">LS</button>
+                        <button type="button" class="controller-buttons btn btn-info text-center" style="width: 5ch; pointer-events: none;">RS</button>
+                        <button type="button" class="controller-buttons btn btn-info text-center" style="width: 5ch; pointer-events: none;">Up</button>
+                        <button type="button" class="controller-buttons btn btn-info text-center" style="width: 5ch; pointer-events: none;">Dn</button>
+                        <button type="button" class="controller-buttons btn btn-info text-center" style="width: 5ch; pointer-events: none;">Lt</button>
+                        <button type="button" class="controller-buttons btn btn-info text-center" style="width: 5ch; pointer-events: none;">Rt</button>
+                    </div>
+                    <div class="row pt-3" id="triggers">
+                        <div class="col-3"><!-- Placeholder --></div>
+                        <div class="col-3">
+                            <label for="left-trigger">Left Trigger</label>
+                            <meter id="left-trigger" class="trigger-value" min="0" max="1" value="0"></meter>
+                        </div>
+                        <div class="col-3">
+                            <label for="right-trigger">Right Trigger</label>
+                            <meter id="right-trigger" class="trigger-value" min="0" max="1" value="0"></meter>
+                        </div>
+                        <div class="col-3"><!-- Placeholder --></div>
+                    </div>
+                    <div class="row pt-3" id="controller-axes">
+                            <!--
+                                When these meters are fetched they will return
+                                in the order they are. Meaning the first meter will be first,
+                                second is second, etc
+                            -->
+                            <div class="col-3">
+                                <label for="axis-1">Left Horizontal</label>
+                                <meter id="axis-1" class="controller-axis" min="-1" max="1" value="0">0</meter>
+                            </div>
+                            <div class="col-3">
+                                <label for="axis-2">Left Vertical</label>
+                                <meter id="axis-2" class="controller-axis" min="-1" max="1" value="0">1</meter>
+                            </div>
+                            <div class="col-3">
+                                <label for="axis-1">Right Horizontal</label>
+                                <meter id="axis-3" class="controller-axis" min="-1" max="1" value="0">2</meter>
+                            </div>
+                            <div class="col-3">
+                                <label for="axis-1">Right Vertical</label>
+                                <meter id="axis-4" class="controller-axis" min="-1" max="1" value="0">3</meter>
+                            </div>
+                    </div>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
