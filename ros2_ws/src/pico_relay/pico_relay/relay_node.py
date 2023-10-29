@@ -77,6 +77,8 @@ class SerialRelay(Node):
         
 
     def read_pico(self):
+        if(self.sef is None):
+            return
         output = str(self.ser.readline(), "utf8")
         # If received output
         if output:
