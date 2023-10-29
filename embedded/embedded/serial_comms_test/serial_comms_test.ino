@@ -16,20 +16,23 @@ void setup() {
   delay(1000);
 
   // Halt until the Serial line is ready
-  while(!Serial.availableForWrite()) {
+  
+  /* while(!Serial.availableForWrite()) {
     // Leave idle LED off until the serial is open
     digitalWrite(LED_BUILTIN, LOW);
     delay(500);
     digitalWrite(LED_BUILTIN, HIGH);
     delay(2000);
-  }
-
+  } */
+  
   // Turn LED off after serial initialization
   digitalWrite(LED_BUILTIN, HIGH);
 
   delay(500);
 
   digitalWrite(ACTIVE_IDLE_PIN, LOW);
+
+  while(!Serial);
 
   // Write back
   delay(1000);
@@ -38,6 +41,7 @@ void setup() {
 }
 
 void loop() {
+
   bool idleStatus = digitalRead(ACTIVE_IDLE_PIN) == HIGH;
 
   if (Serial.available()) {
