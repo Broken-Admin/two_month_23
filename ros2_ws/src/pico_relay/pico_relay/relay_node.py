@@ -35,7 +35,7 @@ class SerialRelay(Node):
         for port in ports:
             try:
                 # connect and send a ping command
-                ser = serial.Serial(port, timeout=1)
+                self.ser = serial.Serial(port, timeout=1)
                 ser.write(b"ping\n\r")
                 response = ser.read_until("\n")
 
