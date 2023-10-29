@@ -36,7 +36,7 @@ class SerialRelay(Node):
             try:
                 # connect and send a ping command
                 ser = serial.Serial(port, timeout=1)
-                ser.write(b"ping \n")
+                ser.write(b"ping\n\r")
                 response = ser.read_until("\n")
 
                 # if pong is in response, then we are talking with the pico
@@ -123,9 +123,9 @@ class SerialRelay(Node):
         else:
             joint1_angle = 0
 
-
-        self.ser.write(bytes(f"servo 1 {joint1_angle} \nservo 2 {joint2_angle} \nservo 3 {joint3_angle} \n", "utf-8"))
-        self.ser.write(bytes(f"servo 4 {joint4_angle} \nservo 5 {joint5_angle} \nservo 6 {joint6_angle} \n", "utf-8"))
+        
+        self.ser.write(bytes(f"servo 1 {joint1_angle} \n\rservo 2 {joint2_angle} \n\rservo 3 {joint3_angle} \n\r", "utf-8"))
+        self.ser.write(bytes(f"servo 4 {joint4_angle} \n\rservo 5 {joint5_angle} \n\rservo 6 {joint6_angle} \n\r", "utf-8"))
 
     @staticmethod
     def list_serial_ports():
