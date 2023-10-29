@@ -28,7 +28,7 @@ class SerialRelay(Node):
         self.subscriber = self.create_subscription(String, '/rover_one/control_data', self.processController, 10)
 
         # Serial conneciton
-        self.sef = serial.Serial();
+        self.ser = serial.Serial();
         return
 
         # Loop through all serial devices on the computer to check for the pico
@@ -77,8 +77,6 @@ class SerialRelay(Node):
         
 
     def read_pico(self):
-        if(self.sef is None):
-            return
         output = str(self.ser.readline(), "utf8")
         # If received output
         if output:
