@@ -28,27 +28,29 @@ class SerialRelay(Node):
         self.subscriber = self.create_subscription(String, '/rover_one/control_data', self.processController, 10)
 
         # Serial conneciton
-        self.ser = serial.Serial();
-        return
 
         # Loop through all serial devices on the computer to check for the pico
         self.port = None
         ports = SerialRelay.list_serial_ports()
         for port in ports:
             try:
+                print(f"Attempting {port}.")
                 # connect and send a ping command
-                self.ser = serial.Serial(port, timeout=1)
-                ser.write(b"ping\n\r")
-                response = ser.read_until("\n")
-
+                self.ser = serial.Serial(port)
+                self.ser.write(b"ping\n\r")
+                response = self.ser.read_until(b"\n");
+                print(f"Able to connect and write to {port}!")
                 # if pong is in response, then we are talking with the pico
                 if b"pong" in response:
                     self.port = port
                     print(f"Found pico at {self.port}!")
                     break
+                else:
+                    print(f"Did not recieve \"pong\" in reply to \"ping\" on device {port}!")
+                    print("Pico likely needs reset!")
             except:
                 pass
-        
+
         if self.port is None:
             print("Unable to find pico... please make sure it is connected.")
             sys.exit(1)
@@ -77,7 +79,8 @@ class SerialRelay(Node):
         
 
     def read_pico(self):
-        output = str(self.ser.readline(), "utf8")
+        # Equivalent to self.ser.readline
+        output = self.ser.readline().decode()
         # If received output
         if output:
             print(f"[Pico] {output}", end="")
@@ -85,14 +88,16 @@ class SerialRelay(Node):
             msg = String()
 
             # Set message data
-            msg.data = f"[INFO] {output}"
+            # Message status is expected to be provided by the Pico
+            msg.data = f"{output}"
 
             # Publish data
             self.publisher.publish(msg)
             #print(f"[Pico] Publishing: {msg}")
     
     def processController(self, msg):
-        print(msg.data)
+
+        print(f"[Control] {json.dumps(json.loads(msg.data))}")
         
         controller_data = json.loads(msg.data)
         # Joint 6 end effector
