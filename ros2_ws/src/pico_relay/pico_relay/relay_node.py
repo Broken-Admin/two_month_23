@@ -19,7 +19,7 @@ class SerialRelay(Node):
 
     def __init__(self):
         # Initalize node with name
-        super().__init__("serial_publisher")
+        super().__init__("rover_one_relay")
 
         # Create a publisher to publish any output the pico sends
         self.publisher = self.create_publisher(String, '/rover_one/pico_status', 10) 
