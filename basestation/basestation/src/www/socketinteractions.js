@@ -59,7 +59,7 @@ function processStatus(msg) {
     codeAppend('/rover_one/pico_status', msg, statusColorClass);
 }
 
-socket.on('control_return', processControlData);
+// socket.on('control_return', processControlData);
 
 function processControlData(msg) {
     codeAppend('/rover_one/control_data', msg);
