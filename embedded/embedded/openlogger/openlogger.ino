@@ -1,12 +1,8 @@
 #include <Arduino.h>
 #include <String.h>
 
-#define OPEN_RST 18
-#define OPEN_TX 16
-#define OPEN_RX 17
-
-// TX, RX
-UART Openlogger(16, 17);
+// Define an Alias
+#define Openlogger Serial1
 
 void setup() {
   // Serial.begin(9600);
@@ -33,12 +29,18 @@ void setup() {
   // Serial.write("Openlog is writing to file.");
 }
 
-void loop() {
-  // put your main code here, to run repeatedly:
-  // Serial.println("Openlogger: Writing data");
+unsigned long currentMillis = 0;
 
-  Openlogger.println("Fuck it we ball");
+void loop() {
+  currentMillis = millis();
+
+  Openlogger.println(currentMillis);
+  if(Openlogger.available()) {
+    Serial.println(Openlogger.read());
+  }
+  Serial.print("Wrote to Openloger:");
+  Serial.println(currentMillis);
   digitalWrite(LED_BUILTIN, HIGH);
-  delay(500);
+  delay(1000);
   digitalWrite(LED_BUILTIN, LOW);
 }
